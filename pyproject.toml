@@ -3,5 +3,9 @@ name = "ai-search-api"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi>=0.162.5",
+    "fastapi[standard]>=0.162.5",
+    "langchain-google-genai>=4.5.0",
+    "langchain-mariadb>=0.0.21",
+    "mariadb>=1.1.15",
+    "python-dotenv>=1.2.4",
 ]
