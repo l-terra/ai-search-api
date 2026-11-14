@@ -53,11 +53,12 @@ def text_search(query: str):
     cursor = connection.cursor()
     cursor.execute(
         """
-        SELECT name 
-        FROM products 
-        ORDER BY MATCH(name) AGAINST(?)
+        SELECT name
+        FROM products
+        WHERE MATCH(name) AGAINST(?)
+        ORDER BY MATCH(name) AGAINST(?) DESC
         LIMIT 10;
-        """, (query,)
+        """, (query, query)
     )
     return [name for (name,) in cursor]
 
@@ -71,3 +72,8 @@ def ingest_product():
             time.sleep(60)
         vector_store.add_texts(products[i:i + INGEST_BATCH_SIZE])
     return "Ingestion complete"
+
+@app.get("/products/vector-search")
+def vector_search(query: str):
+    results = vector_store.similarity_search(query, k=10)
+    return [doc.page_content for doc in results]
